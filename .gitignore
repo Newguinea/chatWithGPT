@@ -1,0 +1,23 @@
+# Ignore all compiled files
+*.o
+*.class
+*.pyc
+
+# Ignore editor and IDE generated files
+.idea/
+.vscode/
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore logs and temporary files
+*.log
+*.tmp
+
+# Ignore specific files or folders
+my-important-file.txt
+my-folder/
+
+# Ignore specific file types
+*.pdf
