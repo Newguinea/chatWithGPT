@@ -1,3 +1,3 @@
 # chatWithGPT
 
-##Some project material to start with
+## Some project material to start with
