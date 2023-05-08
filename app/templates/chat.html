@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            function getChats() {
+                $.ajax({
+                    url: "/api/chats",
+                    type: "GET",
+                    success: function (chats) {
+                        $(".chat-select ul").empty();
+                        chats.forEach(function (chat) {
+                            $(".chat-select ul").append(
+                                '<li data-id="' + chat.id + '">' + chat.name + "</li>"
+                            );
+                        });
+                        $(".chat-select li:first-child").addClass("active");
+                        getMessages($(".chat-select li.active").data("id"));
+                    },
+                });
+            }
+
+            function getMessages(chatId) {
+                $.ajax({
+                    url: "/api/chats/" + chatId + "/messages",
+                    type: "GET",
+                    success: function (messages) {
+                        $(".chat-history").empty();
+                        messages.forEach(function (message) {
+                            $(".chat-history").append('<p>' + message.role + ': ' + message.content + '</p>');
+                        });
+                    },
+                });
+            }
+
+            function createNewChat() {
+                $.ajax({
+                    url: "/api/chats",
+                    type: "POST",
+                    success: function (chat) {
+                        $(".chat-select ul").append(
+                            '<li data-id="' + chat.id + '">' + chat.name + "</li>"
+                        );
+                    },
+                });
+            }
+
+            function sendMessage(chatId, content) {
+                $.ajax({
+                    url: "/api/chats/" + chatId + "/messages",
+                    type: "POST",
+                    contentType: 'application/json',
+                    data: JSON.stringify({content: content}),
+                    success: function (reply) {
+                        $(".chat-history").append('<p>User: ' + content + "</p>");
+                        $(".chat-history").append("<p>AI: " + reply.content + "</p>");
+                    },
+                });
+            }
+
+            getChats();
+
+            $(document).on('click', '.chat-select li', function () {
+                $(".chat-select li.active").removeClass("active");
+                $(this).addClass("active");
+                getMessages($(this).data("id"));
+            });
+
+            $("#newChatButton").on('click', function () {
+                createNewChat();
+            });
+
+            $(".chat-input button").on('click', function () {
+                var chatId = $(".chat-select li.active").data("id");
+                var content = $(".chat-input input[type='text']").val();
+                if (content.trim() !== '') {
+                    sendMessage(chatId, content);
+                    $(".chat-input input[type='text']").val('');
+                }
+            });
+        });
+    </script>
+    <style>
+        /* 设置页面布局样式 */
+        .chat-container {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* 设置左侧聊天选择栏的样式 */
+        .chat-select {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            height: calc(100% - 40px);
+            overflow: auto;
+            float: left;
+            width: 20%;
+        }
+
+        .chat-select ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .chat-select li {
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .chat-select li:hover {
+            background-color: #eee;
+            cursor: pointer;
+        }
+
+        .chat-select li.active {
+            background-color: #ccc;
+        }
+
+        /* 设置右侧对话历史记录和输入框的样式 */
+        .chat-content {
+            float: left;
+            width: 80%;
+            height: 100%;
+        }
+
+        .chat-history {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            height: calc(100% - 80px);
+            overflow: auto;
+        }
+
+        .chat-history p {
+            margin: 0;
+            padding: 5px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .chat-input {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            height: 60px;
+            overflow: auto;
+            display: flex;
+            align-items: center;
+        }
+
+        .chat-input input[type="text"] {
+            border: none;
+            outline: none;
+            height: 100%;
+            flex-grow: 1;
+            margin-right: 10px;
+            font-size: 16px;
+        }
+
+        .chat-input button {
+            border: none;
+            outline: none;
+            height: 100%;
+            background-color: #007bff;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        /* 设置顶部的 new Chat 标签样式 */
+        .new-chat {
+            float: none;
+            font-size: 18px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            margin-right: 0;
+        }
+
+        /* 设置底部的登陆账户信息的样式 */
+        .user-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 20%;
+            height: 40px;
+            line-height: 40px;
+            background-color: #ccc;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="chat-container">
+    <div class="chat-select">
+        <div class="new-chat" id="newChatButton">New Chat</div>
+        <ul>
+            <li class="active">Chat 1</li>
+            <li>Chat 2</li>
+            <li>Chat 3</li>
+        </ul>
+        <div class="user-info">Logged in as John</div>
+    </div>
+    <div class="chat-content">
+        <div class="chat-history">
+            <p>User: Hello, how are you?</p>
+            <p>AI: I'm fine, thank you. How about you?</p>
+            <p>User: I'm good too.</p>
+        </div>
+        <div class="chat-input">
+            <input type="text" placeholder="Type your message here..."/>
+            <button>Send</button>
+        </div>
+    </div>
+</div>
+</body>
+</html>
