@@ -6,7 +6,7 @@ from app.forms import LoginForm, RegisterForm
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import render_template, request, redirect, url_for, flash
 from flask_login import login_user, logout_user, login_required, current_user
-from .api import get_completion
+from .api import get_completion, summarize
 import datetime
 
 
@@ -31,9 +31,16 @@ def login():
     return render_template('login.html', form=form)
 
 
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('login'))
+
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
 
 @app.route('/chat', methods=['GET'])
 @login_required
@@ -61,7 +68,7 @@ def get_chats():
     return jsonify([
         {
             'id': chat.id,
-            'name': 'Chat {}'.format(chat.id),
+            'context': chat.context,
         }
         for chat in chats
     ])
@@ -70,12 +77,12 @@ def get_chats():
 @app.route('/api/chats', methods=['POST'])
 @login_required
 def create_chat():
-    chat = Chat(user_id=current_user.id, timestamp=datetime.datetime.now(), context='', is_complete=False)
+    chat = Chat(user_id=current_user.id, timestamp=datetime.datetime.now(), context='', is_complete=True)
     db.session.add(chat)
     db.session.commit()
     return jsonify({
         'id': chat.id,
-        'name': 'Chat {}'.format(chat.id),
+        'context': chat.context,
     })
 
 
@@ -95,6 +102,7 @@ def get_messages(chat_id):
         for message in messages
     ])
 
+
 @app.route('/api/chats/<int:chat_id>/messages', methods=['POST'])
 @login_required
 def send_message(chat_id):
@@ -108,21 +116,27 @@ def send_message(chat_id):
         return jsonify({'error': 'Message cannot be empty'}), 400
 
     # 将用户消息存储到数据库中
-    user_message = Message(chat_id=chat_id, user_id=current_user.id, text=message_text, is_response=False, timestamp=datetime.datetime.now())
+    user_message = Message(chat_id=chat_id, user_id=current_user.id, text=message_text, is_response=False,
+                           timestamp=datetime.datetime.now())
     db.session.add(user_message)
     db.session.commit()
 
     # 获取 AI 回复
     ai_response = get_completion(message_text)
-    # TODO need to be delete
-    print("AI Response:", ai_response)
 
     # 将 AI 消息存储到数据库中
-    ai_message = Message(chat_id=chat_id, user_id=None, text=ai_response, is_response=True, timestamp=datetime.datetime.now())
+    ai_message = Message(chat_id=chat_id, user_id=None, text=ai_response, is_response=True,
+                         timestamp=datetime.datetime.now())
     db.session.add(ai_message)
     db.session.commit()
+
+    # 如果聊天的context字段为空
+    if not chat.context:
+        chat.context = summarize(message_text)
+        db.session.commit()
 
     return jsonify({
         'role': 'AI',
         'content': ai_response,
+        'context': chat.context
     })

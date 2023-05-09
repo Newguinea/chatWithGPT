@@ -1,65 +1,91 @@
 $(document).ready(function () {
-  function fetchChats() {
-    $.ajax({
-      url: "/api/chats",
-      method: "GET",
-      success: function (chats) {
-        $(".chat-select").html("");
-        chats.forEach(function (chat) {
-          let chatElement = `<li data-chat-id="${chat.id}">${chat.name}</li>`;
-          $(".chat-select").append(chatElement);
+    function getChats() {
+        $.ajax({
+            url: "/api/chats",
+            type: "GET",
+            success: function (chats) {
+                $(".chat-select ul").empty();
+                chats.forEach(function (chat) {
+                    let chatName = chat.context ? chat.context : '';
+                    $(".chat-select ul").append(
+                        '<li data-id="' + chat.id + '" class="chat-item">' + chatName + "</li>"
+                    );
+                });
+                $(".chat-select li:first-child").addClass("active");
+                getMessages($(".chat-select li.active").data("id"));
+            },
         });
-      },
-    });
-  }
+    }
 
-  fetchChats();
 
-  $(".chat-select").on("click", "li", function () {
-    $(".chat-select li.active").removeClass("active");
-    $(this).addClass("active");
-
-    let chatId = $(this).data("chat-id");
-    $.ajax({
-      url: `/api/chats/${chatId}/messages`,
-      method: "GET",
-      success: function (messages) {
-        $(".chat-history").html("");
-        messages.forEach(function (message) {
-          let messageElement = `<p>${message.role}: ${message.content}</p>`;
-          $(".chat-history").append(messageElement);
+    function getMessages(chatId) {
+        $.ajax({
+            url: "/api/chats/" + chatId + "/messages",
+            type: "GET",
+            success: function (messages) {
+                $(".chat-history").empty();
+                messages.forEach(function (message) {
+                    $(".chat-history").append('<p>' + message.role + ': ' + message.content + '</p>');
+                });
+            },
         });
-      },
-    });
-  });
+    }
 
-  $(".chat-input button").on("click", function () {
-    let messageText = $(".chat-input input").val();
-    let chatId = $(".chat-select li.active").data("chat-id");
+    function createNewChat() {
+        $.ajax({
+            url: "/api/chats",
+            type: "POST",
+            success: function (chat) {
+                let chatName = chat.context ? chat.context : 'new_chat';
+                $(".chat-select ul").append(
+                    '<li data-id="' + chat.id + '" class="chat-item">' + chatName + "</li>"
+                );
+                // 更新聊天选择器中的活动聊天
+                $(".chat-select li.active").removeClass("active");
+                $('.chat-select li[data-id="' + chat.id + '"]').addClass("active");
 
-    $.ajax({
-      url: `/api/chats/${chatId}/messages`,
-      method: "POST",
-      contentType: "application/json",
-      data: JSON.stringify({
-        content: messageText,
-      }),
-      success: function (response) {
-        let messageElement = `<p>${response.role}: ${response.content}</p>`;
-        $(".chat-history").append(messageElement);
-        $(".chat-input input").val("");
-      },
-    });
-  });
+                // 清空聊天历史
+                $(".chat-history").empty();
+            },
+        });
+    }
 
-  $(".new-chat").on("click", function () {
-    $.ajax({
-      url: "/api/chats",
-      method: "POST",
-      success: function (chat) {
-        let chatElement = `<li data-chat-id="${chat.id}">${chat.name}</li>`;
-        $(".chat-select").append(chatElement);
-      },
+    function sendMessage(chatId, content) {
+        $.ajax({
+            url: "/api/chats/" + chatId + "/messages",
+            type: "POST",
+            contentType: 'application/json',
+            data: JSON.stringify({content: content}),
+            success: function (reply) {
+                $(".chat-history").append('<p>User: ' + content + "</p>");
+                $(".chat-history").append("<p>AI: " + reply.content + "</p>");
+
+                // 更新当前聊天窗口的context
+                let currentChatItem = $('.chat-select li[data-id="' + chatId + '"]');
+                currentChatItem.text(reply.context);
+            },
+        });
+    }
+
+
+    getChats();
+
+    $(document).on('click', '.chat-select li', function () {
+        $(".chat-select li.active").removeClass("active");
+        $(this).addClass("active");
+        getMessages($(this).data("id"));
     });
-  });
+
+    $("#newChatButton").on('click', function () {
+        createNewChat();
+    });
+
+    $(".chat-input button").on('click', function () {
+        var chatId = $(".chat-select li.active").data("id");
+        var content = $(".chat-input input[type='text']").val();
+        if (content.trim() !== '') {
+            sendMessage(chatId, content);
+            $(".chat-input input[type='text']").val('');
+        }
+    });
 });
