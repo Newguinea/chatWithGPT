@@ -1,0 +1,349 @@
+app/__init__.py
+##############################
+# app/__init__.py
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+from config import Config
+from flask_login import LoginManager
+
+app = Flask(__name__)
+app.config.from_object(Config)
+db = SQLAlchemy(app)
+migrate = Migrate(app, db)
+login_manager = LoginManager()
+login_manager.login_view = 'login'
+login_manager.init_app(app)
+
+from app import routes, models
+
+##############################
+
+app/api.py
+##############################
+import openai
+import os
+
+from dotenv import load_dotenv, find_dotenv
+_ = load_dotenv(find_dotenv()) # read local .env file
+
+openai.api_key = "openai.api_key"
+
+def get_completion(prompt, model="gpt-3.5-turbo"):
+    messages = [{"role": "user", "content": prompt}]
+    response = openai.ChatCompletion.create(
+        model=model,
+        messages=messages,
+        temperature=0, # this is the degree of randomness of the model's output
+    )
+    return response.choices[0].message["content"]
+##############################
+
+app/forms.py
+##############################
+from flask_wtf import FlaskForm
+from wtforms import StringField, PasswordField, SubmitField
+from wtforms.validators import DataRequired, Length, EqualTo
+
+class LoginForm(FlaskForm):
+    username = StringField('用户名', validators=[DataRequired(), Length(min=2, max=20)])
+    password = PasswordField('密码', validators=[DataRequired()])
+    submit = SubmitField('登录')
+
+class RegisterForm(FlaskForm):
+    username = StringField('用户名', validators=[DataRequired(), Length(min=2, max=20)])
+    password = PasswordField('密码', validators=[DataRequired()])
+    confirm_password = PasswordField('确认密码', validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField('注册')
+
+##############################
+
+app/models.py
+##############################
+# app/models.py
+from werkzeug.security import generate_password_hash, check_password_hash
+from datetime import datetime
+from app import db
+from flask_login import UserMixin
+from app import login_manager
+
+class User(UserMixin, db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True, nullable=False)
+    password_hash = db.Column(db.String(128), nullable=False)
+
+    def __repr__(self):
+        return '<User {}>'.format(self.username)
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
+
+class Chat(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    timestamp = db.Column(db.String(20), nullable=False)
+    context = db.Column(db.Text, nullable=False)
+    is_complete = db.Column(db.Boolean, nullable=False)
+
+class Message(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    chat_id = db.Column(db.Integer, db.ForeignKey('chat.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    timestamp = db.Column(db.String(20), nullable=False)
+    text = db.Column(db.Text, nullable=False)
+    is_response = db.Column(db.Boolean, nullable=False)
+
+##############################
+
+app/routes.py
+##############################
+# app/routes.py
+from flask import render_template, redirect, url_for, flash, request, jsonify
+from app import app, db, login_manager
+from app.models import User
+from app.forms import LoginForm, RegisterForm
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask import render_template, request, redirect, url_for, flash
+from flask_login import login_user, logout_user, login_required, current_user
+from .models import Chat, Message
+from .api import get_completion
+
+
+@app.route('/')
+@app.route('/index')
+@login_required
+def index():
+    return render_template('index.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(username=form.username.data).first()
+        if user and user.check_password(form.password.data):
+            flash('登录成功！', 'success')
+            return redirect(url_for('index'))
+        else:
+            flash('登录失败，请检查用户名和密码', 'danger')
+    return render_template('index.html', form=form)
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    form = RegisterForm()
+    if form.validate_on_submit():
+        user = User(username=form.username.data)
+        user.set_password(form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        flash('注册成功！请登录', 'success')
+        return redirect(url_for('login'))
+    return render_template('register.html', form=form)
+
+@app.route('/chat/<int:chat_id>', methods=['GET'])
+@login_required
+def get_chat(chat_id):
+    chat = Chat.query.filter_by(id=chat_id, user_id=current_user.id).first()
+    if not chat:
+        return jsonify({'error': 'Chat not found'}), 404
+
+    messages = Message.query.filter_by(chat_id=chat_id).order_by(Message.timestamp).all()
+    return jsonify({
+        'success': True,
+        'messages': [
+            {
+                'role': 'User' if message.user_id == current_user.id else 'AI',
+                'text': message.text,
+            }
+            for message in messages
+        ]
+    })
+
+@app.route('/chat/<int:chat_id>', methods=['POST'])
+@login_required
+def post_message(chat_id):
+    chat = Chat.query.filter_by(id=chat_id, user_id=current_user.id).first()
+    if not chat:
+        return jsonify({'error': 'Chat not found'}), 404
+
+    message_text = request.form.get('message')
+    if not message_text:
+        return jsonify({'error': 'Message cannot be empty'}), 400
+
+    # 将用户消息存储到数据库中
+    user_message = Message(chat_id=chat_id, user_id=current_user.id, text=message_text, is_response=False)
+    db.session.add(user_message)
+    db.session.commit()
+
+    # 获取 AI 回fu
+    ai_response = get_completion(message_text)
+
+    # 将 AI 消息存储到数据库中
+    ai_message = Message(chat_id=chat_id, user_id=None, text=ai_response, is_response=True)
+    db.session.add(ai_message)
+    db.session.commit()
+
+    return jsonify({'success': True})
+##############################
+
+app/templates/index.html
+##############################
+<!doctype html>
+<html>
+  <head>
+    <title>主页</title>
+  </head>
+  <body>
+    <h1>欢迎！</h1>
+  </body>
+</html>
+
+##############################
+
+app/templates/login.html
+##############################
+<!doctype html>
+<html>
+  <head>
+    <title>登录</title>
+  </head>
+  <body>
+    <h1>登录</h1>
+<form action="{{ url_for('login') }}" method="post">
+  {{ form.hidden_tag() }}
+  <div>
+    {{ form.username.label }}<br>
+    {{ form.username(size=20) }}<br>
+    {% for error in form.username.errors %}
+    <span style="color: red;">{{ error }}</span><br>
+    {% endfor %}
+  </div>
+  <div>
+    {{ form.password.label }}<br>
+    {{ form.password(size=20) }}<br>
+    {% for error in form.password.errors %}
+    <span style="color: red;">{{ error }}</span><br>
+    {% endfor %}
+  </div>
+  <div>
+    {{ form.submit() }}
+  </div>
+</form>
+
+    <p>没有账号？<a href="{{ url_for('register') }}">注册</a></p>
+  </body>
+</html>
+
+##############################
+
+app/templates/register.html
+##############################
+<!doctype html>
+<html>
+  <head>
+    <title>注册</title>
+  </head>
+  <body>
+    <h1>注册</h1>
+    <form action="{{ url_for('register') }}" method="post">
+      {{ form.hidden_tag() }}
+      <div>
+        {{ form.username.label }}<br>
+        {{ form.username(size=20) }}<br>
+        {% for error in form.username.errors %}
+        <span style="color: red;">{{ error }}</span><br>
+        {% endfor %}
+      </div>
+      <div>
+        {{ form.password.label }}<br>
+        {{ form.password(size=20) }}<br>
+        {% for error in form.password.errors %}
+        <span style="color: red;">{{ error }}</span><br>
+        {% endfor %}
+      </div>
+      <div>
+        {{ form.confirm_password.label }}<br>
+        {{ form.confirm_password(size=20) }}<br>
+        {% for error in form.confirm_password.errors %}
+        <span style="color: red;">{{ error }}</span><br>
+        {% endfor %}
+      </div>
+      <div>
+        {{ form.submit() }}
+      </div>
+    </form>
+    <p>已有账号？<a href="{{ url_for('login') }}">登录</a></p>
+  </body>
+</html>
+
+##############################
+
+app/static/main.js
+##############################
+$(document).ready(function () {
+  $(".chat-select li").on("click", function () {
+    // 获取当前选中的聊天 ID
+    let chatId = $(this).data("chat-id");
+
+    // 发送请求以获取聊天消息
+    $.ajax({
+      url: `/chat/${chatId}`,
+      method: "GET",
+      success: function (response) {
+        // 清空聊天历史记录
+        $(".chat-history").html("");
+
+        // 将获取到的消息添加到聊天历史记录中
+        response.messages.forEach(function (message) {
+          let messageElement = `<p>${message.sender}: ${message.text}</p>`;
+          $(".chat-history").append(messageElement);
+        });
+      },
+    });
+  });
+
+  $(".chat-input button").on("click", function () {
+    let messageText = $(".chat-input input").val();
+    let chatId = $(".chat-select li.active").data("chat-id");
+
+    // 发送请求以添加新消息
+    $.ajax({
+      url: `/chat/${chatId}`,
+      method: "POST",
+      data: {
+        message: messageText,
+      },
+      success: function (response) {
+        let messageElement = `<p>User: ${messageText}</p>`;
+        $(".chat-history").append(messageElement);
+        $(".chat-input input").val("");
+      },
+    });
+  });
+});
+
+##############################
+
+app.py
+##############################
+from app import app
+##############################
+
+config.py
+##############################
+import os
+basedir = os.path.abspath(os.path.dirname(__file__))
+
+class Config(object):
+    SECRET_KEY = os.environ.get('SECRET_KEY') or 'your_secret_key'
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
+        'sqlite:///' + os.path.join(basedir, 'app.db')
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+##############################
+
