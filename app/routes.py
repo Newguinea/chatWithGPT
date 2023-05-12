@@ -25,7 +25,7 @@ def login():
         if user and user.check_password(form.password.data):
             login_user(user)
             flash('登录成功！', 'success')
-            return redirect(url_for('index'))
+            return redirect(url_for('chat'))
         else:
             flash('登录失败，请检查用户名和密码', 'danger')
     return render_template('login.html', form=form)
