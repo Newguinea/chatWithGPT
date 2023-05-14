@@ -46,7 +46,6 @@ Mako==1.2.4
 MarkupSafe==2.1.2
 pipreqs==0.4.13
 python-dotenv==1.0.0
-SQLAlchemy==2.0.12
 Werkzeug==2.3.3
 WTForms==3.0.1
 yarg==0.1.9
