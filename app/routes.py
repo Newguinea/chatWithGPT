@@ -141,3 +141,18 @@ def send_message(chat_id):
         'context': chat.context
     })
 
+@app.route('/api/chats/<int:chat_id>', methods=['DELETE'])
+@login_required
+def delete_chat(chat_id):
+    chat = Chat.query.filter_by(id=chat_id, user_id=current_user.id).first()
+    if not chat:
+        return jsonify({'error': 'Chat not found'}), 404
+
+    # 删除所有相关的消息
+    Message.query.filter_by(chat_id=chat_id).delete()
+
+    # 删除聊天
+    db.session.delete(chat)
+    db.session.commit()
+
+    return jsonify({'message': 'Chat deleted'}), 200

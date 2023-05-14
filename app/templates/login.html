@@ -1,31 +1,32 @@
 <!doctype html>
 <html>
-  <head>
+<head>
     <title>login</title>
-  </head>
-  <body>
-    <h1>login</h1>
+
+</head>
+<body>
+<h1>login</h1>
 <form action="{{ url_for('login') }}" method="post">
-  {{ form.hidden_tag() }}
-  <div>
-    {{ form.username.label }}<br>
-    {{ form.username(size=20) }}<br>
-    {% for error in form.username.errors %}
-    <span style="color: red;">{{ error }}</span><br>
-    {% endfor %}
-  </div>
-  <div>
-    {{ form.password.label }}<br>
-    {{ form.password(size=20) }}<br>
-    {% for error in form.password.errors %}
-    <span style="color: red;">{{ error }}</span><br>
-    {% endfor %}
-  </div>
-  <div>
-    {{ form.submit() }}
-  </div>
+    {{ form.hidden_tag() }}
+    <div>
+        {{ form.username.label }}<br>
+        {{ form.username(size=20) }}<br>
+        {% for error in form.username.errors %}
+            <span style="color: red;">{{ error }}</span><br>
+        {% endfor %}
+    </div>
+    <div>
+        {{ form.password.label }}<br>
+        {{ form.password(size=20) }}<br>
+        {% for error in form.password.errors %}
+            <span style="color: red;">{{ error }}</span><br>
+        {% endfor %}
+    </div>
+    <div>
+        {{ form.submit() }}
+    </div>
 </form>
 
-    <p>do not have an account?<a href="{{ url_for('register') }}">register</a></p>
-  </body>
+<p>do not have an account?<a href="{{ url_for('register') }}">register</a></p>
+</body>
 </html>
