@@ -88,4 +88,24 @@ $(document).ready(function () {
             $(".chat-input input[type='text']").val('');
         }
     });
+
+    $(".chat-input textarea").keydown(function (event) {
+        // Checks if the enter key is pressed
+        if (event.key === "Enter") {
+            // Check if the Shift key is pressed at the same time
+            if (event.shiftKey) {
+                // If the Shift key is pressed at the same time, do nothing and let the browser do the default line wrap
+            } else {
+                // If the Shift key is not pressed at the same time, we block the browser's default action
+                // and then call the function that sends the message
+                event.preventDefault();
+                var chatId = $(".chat-select li.active").data("id");
+                var content = $(this).val();
+                if (content.trim() !== '') {
+                    sendMessage(chatId, content);
+                    $(this).val('');
+                }
+            }
+        }
+    });
 });
