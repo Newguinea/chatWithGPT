@@ -140,3 +140,4 @@ def send_message(chat_id):
         'content': ai_response,
         'context': chat.context
     })
+

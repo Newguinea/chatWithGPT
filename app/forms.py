@@ -5,15 +5,15 @@ from wtforms.validators import DataRequired, Length, EqualTo
 
 class LoginForm(FlaskForm):
     username = StringField(
-        '用户名', validators=[DataRequired(), Length(min=2, max=20)])
-    password = PasswordField('密码', validators=[DataRequired()])
-    submit = SubmitField('登录')
+        'username', validators=[DataRequired(), Length(min=2, max=20)])
+    password = PasswordField('password', validators=[DataRequired()])
+    submit = SubmitField('login')
 
 
 class RegisterForm(FlaskForm):
     username = StringField(
-        '用户名', validators=[DataRequired(), Length(min=2, max=20)])
-    password = PasswordField('密码', validators=[DataRequired()])
+        'username', validators=[DataRequired(), Length(min=2, max=20)])
+    password = PasswordField('password', validators=[DataRequired()])
     confirm_password = PasswordField(
-        '确认密码', validators=[DataRequired(), EqualTo('password')])
-    submit = SubmitField('注册')
+        'confirmation', validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField('register')
