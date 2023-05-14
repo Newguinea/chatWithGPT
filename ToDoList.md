@@ -15,3 +15,4 @@ if error then hint
 message context linkage
 message exceed send length
 base.html(nav bar)
+delete account
