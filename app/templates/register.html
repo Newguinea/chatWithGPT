@@ -1,10 +1,10 @@
 <!doctype html>
 <html>
   <head>
-    <title>注册</title>
+    <title>register</title>
   </head>
   <body>
-    <h1>注册</h1>
+    <h1>register</h1>
     <form action="{{ url_for('register') }}" method="post">
       {{ form.hidden_tag() }}
       <div>
@@ -32,6 +32,6 @@
         {{ form.submit() }}
       </div>
     </form>
-    <p>已有账号？<a href="{{ url_for('login') }}">登录</a></p>
+    <p>already have an account?<a href="{{ url_for('login') }}">login</a></p>
   </body>
 </html>

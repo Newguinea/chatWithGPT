@@ -1,6 +1,6 @@
 # Todo List
-press enter send message
-logout
+
+logout(from base html)
 delete chat(not message)
 search message in database and jump(global)
 chat context
