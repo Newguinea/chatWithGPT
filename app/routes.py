@@ -2,11 +2,13 @@
 from flask import render_template, redirect, url_for, flash, request, jsonify
 from app import app, db, login_manager
 from app.models import User, Chat, Message
-from app.forms import LoginForm, RegisterForm
+from app.forms import LoginForm, RegisterForm, LongtextForm
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.datastructures import CombinedMultiDict
 from flask import render_template, request, redirect, url_for, flash
 from flask_login import login_user, logout_user, login_required, current_user
 from .api import get_completion, summarize
+from .longtext import getReplay
 import datetime
 
 
@@ -25,7 +27,7 @@ def login():
         if user and user.check_password(form.password.data):
             login_user(user)
             flash('登录成功！', 'success')
-            return redirect(url_for('chat'))
+            return redirect(url_for('index'))
         else:
             flash('登录失败，请检查用户名和密码', 'danger')
     return render_template('login.html', form=form)
@@ -156,3 +158,26 @@ def delete_chat(chat_id):
     db.session.commit()
 
     return jsonify({'message': 'Chat deleted'}), 200
+
+
+@app.route('/process', methods=['GET', 'POST'])
+def longtextProcess():
+    form_data = CombinedMultiDict((request.files, request.form))
+    form = LongtextForm(form_data)
+    print("position1")
+    replay = None
+    if form.validate_on_submit():
+        file = form.file.data
+        final_prompt = form.final_prompt.data
+        compress_prompt = form.compress_prompt.data
+        text = file.read().decode('utf-8')
+        print("received")
+        print(text)
+        replay = getReplay(text, final_prompt, compress_prompt)
+        print("replay" + replay)
+        # 创建一个新的表单实例，传入表单字段的值
+        form = LongtextForm(final_prompt=final_prompt, compress_prompt=compress_prompt)
+    else:
+        print(form.errors)
+        print(request.files)
+    return render_template('longtext.html', form=form, replay=replay)
