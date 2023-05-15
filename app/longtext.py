@@ -57,18 +57,18 @@ def finalPrompt(final_prompt, text):
     output = llm(prompt)
     return output
 
-# 打开文件
-with open('The Little Prince.txt', 'r', encoding='utf-8') as file:
-    file_content = file.read()
-
-# 将文件内容传递给变量
-text = file_content
-
-compress_prompt = """there was a very long text ,Your goal is to give a summary of this section so that a reader will have a full understanding of what happened.
-Your response should be at least three paragraphs and fully encompass what was said in the passage."""
-final_prompt = """You will be given a series of summaries,
-Your goal is to give a verbose summary of what happened in the story.
-The reader should be able to grasp what happened in the text.
-"""
-
-print(getReplay(text, final_prompt, compress_prompt))
+# # 打开文件
+# with open('The Little Prince.txt', 'r', encoding='utf-8') as file:
+#     file_content = file.read()
+#
+# # 将文件内容传递给变量
+# text = file_content
+#
+# compress_prompt = "there was a very long text ,Your goal is to give a summary of this section so that a reader will have a full understanding of what happened.
+# Your response should be at least three paragraphs and fully encompass what was said in the passage."
+# final_prompt = "You will be given a series of summaries,
+# Your goal is to give a verbose summary of what happened in the story.
+# The reader should be able to grasp what happened in the text.
+# "
+#
+# print(getReplay(text, final_prompt, compress_prompt))

@@ -21,7 +21,7 @@ file_list = [
     'app/templates/index.html',
     'app/templates/login.html',
     'app/templates/register.html',
-    'app/static/main.js',
+    'app/static/chat.js',
     'app.py',
     'config.py'
 ]
