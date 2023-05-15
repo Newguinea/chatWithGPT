@@ -283,7 +283,7 @@ app/templates/register.html
 
 ##############################
 
-app/static/main.js
+app/static/chat.js
 ##############################
 $(document).ready(function () {
   $(".chat-select li").on("click", function () {
