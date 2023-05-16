@@ -12,11 +12,12 @@ class GameSession:
     def __init__(self):
         self.messagesShow = []
         self.messagesSend = []
+        self.chatCount = 0  # 新添加的属性，用于记录对话数量
 
-    #when receive message use this funtion
+    #when receive message use this function
     def get_completion(self, prompt, model="gpt-3.5-turbo"):
         self.messagesShow.append({"role": "user", "content": prompt})
-        self.messagesSend.append({"role": "user", "content": prompt})
+        self.messagesSend.append({"role": "user", "content": prompt + str(self.chatCount)})
         self.messagesSend = self.getMessages()
         response = openai.ChatCompletion.create(
             model=model,
@@ -25,7 +26,8 @@ class GameSession:
         )
         # Add assistant's response to the message list
         aiReturn = response.choices[0].message["content"]
-        self.messagesSend.append({"role": "assistant", "content": aiReturn})
+        self.chatCount += 1  # 在AI回复后增加对话计数器的值
+        self.messagesSend.append({"role": "assistant", "content": aiReturn + str(self.chatCount)})
         self.messagesShow.append({"role": "assistant", "content": aiReturn})
         return aiReturn
 
@@ -38,8 +40,9 @@ class GameSession:
         locations, and plot twists. 
     
         Generate a random character for me with a name, rank, personality traits, and items to carry, 
-        
-        Now, set the opening scene for our adventure. and ask a question to player
+        Now, set the opening scene for our adventure. and ask a question related to this game, as a host of this game\
+        you need to chat with the player and ask the player choice, and player should be making progress step by step\
+        you should make 10 - 20 times response untill game end.
         
         refer to the format below Generate your first output
         ```{format}```
@@ -56,8 +59,8 @@ class GameSession:
          broken only by the occasional hoot of an owl or the rustling of leaves underfoot.
         
         As you take your first step into the forest, the world around you seems to change. The daylight struggles to \
-        penetrate the dense canopy, casting long shadows that dance between the trees. The path ahead is barely visible, \
-        covered in a thick layer of fallen leaves and tangled roots. \
+        penetrate the dense canopy, casting long shadows that dance between the trees. The path ahead is barely \
+        visible, covered in a thick layer of fallen leaves and tangled roots. \
         You can't shake off the feeling that you're being watched.
         
         In the distance, you spot a flickering light, like a distant lantern in the darkness. \
