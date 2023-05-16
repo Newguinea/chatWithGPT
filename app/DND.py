@@ -7,27 +7,31 @@ from dotenv import load_dotenv, find_dotenv
 _ = load_dotenv(find_dotenv())  # read local .env file
 openai_api_key = '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'
 openai.api_key = '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'
-messages = []
+messagesShow = []
+messagesSend = []
 
 #when receive message use this funtion
 def get_completion(prompt, model="gpt-3.5-turbo"):
-    global messages
-    messages.append({"role": "user", "content": prompt})
-    messages = getMessages()
+    global messagesShow, messagesSend
+    messagesShow.append({"role": "user", "content": prompt})
+    messagesSend.append({"role": "user", "content": prompt})
+    messagesSend = getMessages()
     response = openai.ChatCompletion.create(
         model=model,
-        messages=messages,
+        messages=messagesSend,
         temperature=0.2,  # this is the degree of randomness of the model's output
     )
     # Add assistant's response to the message list
     aiReturn = response.choices[0].message["content"]
-    messages.append({"role": "assistant", "content": aiReturn})
+    messagesSend.append({"role": "assistant", "content": aiReturn})
+    messagesShow.append({"role": "assistant", "content": aiReturn})
     return aiReturn
 
 #press the button start or restrat the game
 def startGame():
-    global messages
-    messages = []
+    global messagesShow, messagesSend
+    messagesSend = []
+    messagesShow = []
     starter = '''As a highly capable AI Dungeon Master, you are going to guide me through a single-player game of \
     Dungeons & Dragons. The game will take place in a randomly generated fantasy world with unique characters, \
     locations, and plot twists. 
@@ -65,14 +69,15 @@ def startGame():
     
     What would you like to do, Thalia Ravenshadow?```'''
     firstAimessage = get_completion(prompt=starter)
-    del messages[0] #first prompt is very large, reduce speace
+    del messagesSend[0] #first prompt is very large, reduce speace
+    del messagesShow[0]  # first prompt is very large, reduce speace
     return firstAimessage
 
 def getMessages():
-    global messages
+    global messagesSend
     # TODO get a mesaage list in this format, start with ai first response, if message lenth is too long, for loop delete message[1]
     # max lenth is 2000 token, use this number because want to speed up the api replay speed
     llm = OpenAI(temperature=0, openai_api_key=openai_api_key)
-    while (llm.get_num_tokens(str(messages)) > 2000):
-        del messages[1]
-    return messages
+    while (llm.get_num_tokens(str(messagesSend)) > 2000):
+        del messagesSend[1]
+    return messagesSend
