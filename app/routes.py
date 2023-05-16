@@ -9,6 +9,7 @@ from flask import render_template, request, redirect, url_for, flash
 from flask_login import login_user, logout_user, login_required, current_user
 from .api import get_completion, summarize
 from .longtext import getReplay
+from app import DND
 import datetime
 
 
@@ -143,6 +144,7 @@ def send_message(chat_id):
         'context': chat.context
     })
 
+
 @app.route('/api/chats/<int:chat_id>', methods=['DELETE'])
 @login_required
 def delete_chat(chat_id):
@@ -161,6 +163,7 @@ def delete_chat(chat_id):
 
 
 @app.route('/process', methods=['GET', 'POST'])
+@login_required
 def longtextProcess():
     form_data = CombinedMultiDict((request.files, request.form))
     form = LongtextForm(form_data)
@@ -181,3 +184,26 @@ def longtextProcess():
         print(form.errors)
         print(request.files)
     return render_template('longtext.html', form=form, replay=replay)
+
+
+@app.route('/dnd', methods=['GET'])
+@login_required
+def dnd():
+    return render_template('dnd.html')
+
+
+@app.route('/start', methods=['POST'])
+@login_required
+def start():
+    firstAimessage = DND.startGame()
+    return jsonify(firstAimessage)
+
+
+@app.route('/message', methods=['POST'])
+@login_required
+def message():
+    prompt = request.json.get('prompt')
+    print(prompt)
+    response = DND.get_completion(prompt)
+    print(response)
+    return jsonify(response)

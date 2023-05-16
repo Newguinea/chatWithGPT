@@ -13,4 +13,9 @@ login_manager = LoginManager()
 login_manager.login_view = 'login'
 login_manager.init_app(app)
 
+# Import GameSession class and create an instance of it
+from app.DND import GameSession
+
+DND = GameSession()
+
 from app import routes, models
