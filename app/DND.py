@@ -27,7 +27,7 @@ class GameSession:
         # Add assistant's response to the message list
         aiReturn = response.choices[0].message["content"]
         self.chatCount += 1  # 在AI回复后增加对话计数器的值
-        self.messagesSend.append({"role": "assistant", "content": aiReturn + str(self.chatCount)})
+        self.messagesSend.append({"role": "assistant", "content": aiReturn})
         self.messagesShow.append({"role": "assistant", "content": aiReturn})
         return aiReturn
 
