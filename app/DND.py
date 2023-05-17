@@ -27,7 +27,7 @@ class GameSession:
         # Add assistant's response to the message list
         aiReturn = response.choices[0].message["content"]
         self.chatCount += 1  # 在AI回复后增加对话计数器的值
-        self.messagesSend.append({"role": "assistant", "content": aiReturn + str(self.chatCount)})
+        self.messagesSend.append({"role": "assistant", "content": aiReturn})
         self.messagesShow.append({"role": "assistant", "content": aiReturn})
         return aiReturn
 
@@ -42,7 +42,11 @@ class GameSession:
         Generate a random character for me with a name, rank, personality traits, and items to carry, 
         Now, set the opening scene for our adventure. and ask a question related to this game, as a host of this game\
         you need to chat with the player and ask the player choice, and player should be making progress step by step\
-        you should make 10 - 20 times response untill game end.
+        you should make 10 - 20 times response untill game end. as the limit of 4096 token, speed of your replay, so\
+        I send your mesaages with limit 2000 tokens message length, if the message is too long, it will cut the \
+        the thired message in message list, and you can see in the end of user prompt has a count number, that is the \
+        number of times the user reply, {"role": "user", "content": "prompt3")}, that 3 is means it is the 3 + 1 = 4\
+        The user's fourth response
         
         refer to the format below Generate your first output
         ```{format}```
