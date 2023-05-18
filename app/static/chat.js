@@ -85,10 +85,10 @@ $(document).ready(function () {
 
     $(".chat-input button").on('click', function () {
         var chatId = $(".chat-select li.active").data("id");
-        var content = $(".chat-input input[type='text']").val();
+        var content = $(".chat-input textarea").val();
         if (content.trim() !== '') {
             sendMessage(chatId, content);
-            $(".chat-input input[type='text']").val('');
+            $(".chat-input textarea").val('');
         }
     });
 
@@ -106,7 +106,7 @@ $(document).ready(function () {
                 var content = $(this).val();
                 if (content.trim() !== '') {
                     sendMessage(chatId, content);
-                    $(this).val('');
+                    $(this).val('');  // 清空 textarea
                 }
             }
         }
