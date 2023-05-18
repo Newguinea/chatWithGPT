@@ -1,41 +1,15 @@
-/* longText.css */
 body {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    font-family: Arial, sans-serif;
 }
 
-#main-content {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.container {
+    max-width: 800px;
 }
 
-#upload-form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
+h2 {
+    color: #007bff;
 }
 
-#upload-form input[type="submit"] {
-    margin-top: 10px;
-}
-
-h2, input[type="file"], input[type="submit"], textarea {
-    width: 50%;
-    margin: 10px auto;
-}
-
-@media screen and (min-width: 768px) {
-    #upload-form {
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: space-evenly;
-    }
-
-    h2, input[type="file"], input[type="submit"], textarea {
-        width: 30%;
-    }
+p {
+    white-space: pre-wrap;  /* For preserving new lines in the text */
 }
