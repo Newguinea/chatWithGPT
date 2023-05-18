@@ -1,34 +1,33 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Upload and Process File</title>
-    <link rel="stylesheet" type="text/css" href="static/css/longtext.css">
-</head>
-<body>
-<div id="content">
-    <div id="sidebar">
-        <h2>history</h2>
-        <!-- 历史记录部分 -->
-    </div>
+{% extends "base.html" %}
 
-    <div id="main-content">
-        <h2>upload the file</h2>
-        <form id="upload-form" action="{{ url_for('longtextProcess') }}" method="POST" enctype="multipart/form-data">
-            {{ form.hidden_tag() }}  <!-- 添加这一行 -->
-            {{ form.file.label }}<br>
-            {{ form.file }}<br>
-            <h2>input</h2>
-            {{ form.final_prompt.label }}<br>
-            {{ form.final_prompt }}<br>
-            {{ form.compress_prompt.label }}<br>
-            {{ form.compress_prompt }}<br>
-            <input type="submit" value="Start Process">
-        </form>
-        {% if replay %}
-            <h2>Result</h2>
-            <p>{{ replay }}</p>
-        {% endif %}
+{% block title %}
+    Upload and Process File
+{% endblock %}
+
+{% block heading %}
+    Upload and Process File
+{% endblock %}
+
+{% block content %}
+{#    <link rel="stylesheet" href="{{ url_for('static', filename='longText.css') }}">#}
+
+    <div id="content">
+        <div id="main-content">
+            <h2>Upload the File</h2>
+            <form id="upload-form" action="{{ url_for('longtextProcess') }}" method="POST" enctype="multipart/form-data">
+                {{ form.hidden_tag() }}
+                {{ form.file }}
+                <h2>Input</h2>
+                {{ form.final_prompt.label }}<br>
+                {{ form.final_prompt }}<br>
+                {{ form.compress_prompt.label }}<br>
+                {{ form.compress_prompt }}<br>
+                <input type="submit" value="Start Process">
+            </form>
+            {% if replay %}
+                <h2>Result</h2>
+                <p>{{ replay }}</p>
+            {% endif %}
+        </div>
     </div>
-</div>
-</body>
-</html>
+{% endblock %}

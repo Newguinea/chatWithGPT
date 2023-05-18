@@ -1,13 +1,27 @@
-<!doctype html>
-<html>
-  <head>
-    <title>main page</title>
-  </head>
-  <body>
-    <a href="{{ url_for('logout') }}">Logout</a>
-    <h1>welcome！</h1>
-  <p>toLongText<a href="{{ url_for('longtextProcess') }}">go</a></p>
-  <p>toNormalChat<a href="{{ url_for('chat') }}">go</a></p>
-  <p>toDND<a href="{{ url_for('dnd') }}">go</a></p>
-  </body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}
+    Home Page
+{% endblock %}
+
+{% block heading %}
+    Main Page
+{% endblock %}
+
+{% block content %}
+
+    <div>
+        <h2>Welcome and introduction</h2>
+    </div>
+    <div>
+        <h2>LongText</h2>
+    </div>
+    <div>
+        <h2>NormalChat it's just a very basic function</h2>
+    </div>
+    <div>
+        <h2>DND always the best</h2>
+    </div>
+
+
+{% endblock %}

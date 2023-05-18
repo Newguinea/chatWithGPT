@@ -1,10 +1,17 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <link rel="stylesheet" type="text/css" href="/static/dnd.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block title %}
+DND
+{% endblock %}
+
+{% block heading %}
+DND
+{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dnd.css') }}">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 <div class="chat-container">
     <button class="start-play-btn">Start Play</button>
     <div class="chat-history" id="chat-history">
@@ -15,6 +22,5 @@
         <button class="send-btn" id="send-btn">Send</button>
     </div>
 </div>
-<script src="/static/dnd.js"></script>
-</body>
-</html>
+<script src="{{ url_for('static', filename='dnd.js') }}"></script>
+{% endblock %}
