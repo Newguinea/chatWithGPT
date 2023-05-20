@@ -23,38 +23,43 @@
 
     <div style="position: relative; margin-top: -20px;">
         <img src="{{ url_for('static', filename='images/ai.jpg') }}" alt="AI Image">
-        <div style="position: absolute; top: 30%; left: 25%; background-color: rgba(128, 128, 128, 0.5);">
+        <div style="position: absolute; top: 30%; left: 25%; background-color: rgba(225, 225, 225, 0.9);">
             <h3 class="header">AI Innovation Hub</h3>
             <p class="header">Embrace the Future with Our Advanced AI Playground</p>
         </div>
     </div>
 
     <div style="position: relative;">
-        <img src="{{ url_for('static', filename='images/book.jpg') }}" alt="books">
-        <div style="position: absolute; top: 45%; left: 25%; background-color: rgba(250, 205, 136, 0.7);">
-            <h3>Purify</h3>
-            <p>uploading a txt file, trimming excess content, <br>
-                crafting engaging summaries to empower your narratives.</p>
-        </div>
+        <a href="{{ url_for('longtextProcess') }}">
+            <img src="{{ url_for('static', filename='images/book.jpg') }}" alt="books">
+            <div style="position: absolute; top: 45%; left: 25%; background-color: rgba(250, 205, 136, 0.7);">
+                <h3>Purify</h3>
+                <p>uploading a txt file, trimming excess content, <br>
+                    crafting engaging summaries to empower your narratives.</p>
+            </div>
+        </a>
     </div>
 
     <div style="position: relative;">
-        <img src="{{ url_for('static', filename='images/talk.jpg') }}" alt="talk">
-        <div style="position: absolute; top: 45%; left: 25%; background-color: rgba(120, 120, 120, 0.8);">
-            <h3 style="color: white">ChatOracle</h3>
-            <p style="color: white">personal AI confidante, ready to answer your questions,<br>
-                provide advice, and satisfy your curiosity.</p>
-        </div>
-
+        <a href="{{ url_for('chat') }}">
+            <img src="{{ url_for('static', filename='images/talk.jpg') }}" alt="talk">
+            <div style="position: absolute; top: 45%; left: 25%; background-color: rgba(120, 120, 120, 0.8);">
+                <h3 style="color: white">ChatOracle</h3>
+                <p style="color: white">personal AI confidante, ready to answer your questions,<br>
+                    provide advice, and satisfy your curiosity.</p>
+            </div>
+        </a>
     </div>
 
     <div style="position: relative;">
-        <img src="{{ url_for('static', filename='images/dnd.jpg') }}" alt="Purify">
-        <div style="position: absolute; top: 45%; left: 25%; background-color: rgba(224, 133, 96, 0.4);">
-            <h3 style="color: rgba(252, 242, 229, 1)">AdventureCraft</h3>
-            <p>Unleash your inner adventurer,<br> Step into the exhilarating world of Dungeons & Dragons,<br>
-                create an epic tale. </p>
-        </div>
+        <a href="{{ url_for('dnd') }}">
+            <img src="{{ url_for('static', filename='images/dnd.jpg') }}" alt="Purify">
+            <div style="position: absolute; top: 45%; left: 25%; background-color: rgba(224, 133, 96, 0.8);">
+                <h3 style="color: rgba(252, 242, 229, 1)">AdventureCraft</h3>
+                <p>Unleash your inner adventurer,<br> Step into the exhilarating world of Dungeons & Dragons,<br>
+                    create an epic tale. </p>
+            </div>
+        </a>
     </div>
 
 {% endblock %}

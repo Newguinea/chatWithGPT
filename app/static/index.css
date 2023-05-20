@@ -10,6 +10,19 @@ img {
 
 h3 {
     font-size: 48px;
+    color: black;
+}
+
+h3:link {
+    color: black;
+}
+
+p {
+    color: black;
+}
+
+p:link {
+    color: black;
 }
 
 @media (min-width: 992px) {
