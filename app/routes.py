@@ -8,7 +8,7 @@ from werkzeug.datastructures import CombinedMultiDict
 from flask import render_template, request, redirect, url_for, flash
 from flask_login import login_user, logout_user, login_required, current_user
 from .api import get_completion, summarize
-from .longtext import getReplay
+from .longtext import getReply
 from app import DND
 import datetime
 
@@ -167,23 +167,22 @@ def delete_chat(chat_id):
 def longtextProcess():
     form_data = CombinedMultiDict((request.files, request.form))
     form = LongtextForm(form_data)
-    print("position1")
-    replay = None
+    reply = ""
     if form.validate_on_submit():
         file = form.file.data
         final_prompt = form.final_prompt.data
         compress_prompt = form.compress_prompt.data
         text = file.read().decode('utf-8')
-        print("received")
-        print(text)
-        replay = getReplay(text, final_prompt, compress_prompt)
-        print("replay" + replay)
-        # 创建一个新的表单实例，传入表单字段的值
+        reply = getReply(text, final_prompt, compress_prompt)
+        if reply == "":
+            print("replay is None")
+        else:
+            print("reply: (in routes)" + reply)
         form = LongtextForm(final_prompt=final_prompt, compress_prompt=compress_prompt)
-    else:
-        print(form.errors)
-        print(request.files)
-    return render_template('longtext.html', form=form, replay=replay)
+    # else:
+    #     print(form.errors)
+    #     print(request.files)
+    return render_template('longtext.html', form=form, replay=reply)
 
 
 @app.route('/dnd', methods=['GET'])

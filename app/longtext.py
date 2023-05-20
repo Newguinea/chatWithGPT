@@ -9,28 +9,26 @@ from dotenv import load_dotenv, find_dotenv
 
 _ = load_dotenv(find_dotenv())  # read local .env file
 openai_api_key = os.getenv("openai_api_key")
-
-openai_api_key = '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'
 llm = OpenAI(temperature=0, openai_api_key=openai_api_key)
 llm3 = ChatOpenAI(temperature=0,
                   openai_api_key=openai_api_key,
                   max_tokens=1000,
                   )
 
-def getReplay(text, final_prompt="what is this story? do you think it is a good story?", compress_prompt="please compress the text and output key information"):
+def getReply(text, final_prompt="what is this story? do you think it is a good story?", compress_prompt="please compress the text and output key information"):
     text = compressText(text, compress_prompt, final_prompt)
     return finalPrompt(final_prompt, text)
 
 
 def compressText(text, compress_prompt, final_prompt):
-    condition = True
+    condition = llm.get_num_tokens(text + final_prompt) > 3800
     while condition:
-        # TODO 如果大于3000 token，拆解成10000字符长度，3000重合长度的段落
-        text_splitter = RecursiveCharacterTextSplitter(separators=["\n\n", "\n", "\t"], chunk_size=10000,
+        # TODO 如果大于3800 token，拆解成10000字符长度，3000重合长度的段落
+        text_splitter = RecursiveCharacterTextSplitter(separators=["\n\n", "\n", "\t", " ", ".", ","], chunk_size=10000,
                                                        chunk_overlap=3000)
         docs = text_splitter.create_documents([text])
         num_documents = len(docs)
-        print(f"Now our book is split up into {num_documents} documents")
+        print(f"Now our text is split up into {num_documents} documents")
         selected_docs = docs
 
         map_prompt = compress_prompt + "\n" + "```{text}```"
@@ -52,9 +50,7 @@ def compressText(text, compress_prompt, final_prompt):
 
         summaries = "\n".join(summary_list)
         text = summaries
-        if (llm.get_num_tokens(summaries + final_prompt) < 3800):
-            condition = False
-    print("its a for loop to reduce the text size")
+        condition = llm.get_num_tokens(summaries + final_prompt) > 3800
     return text
 
 def finalPrompt(final_prompt, text):
@@ -64,18 +60,18 @@ def finalPrompt(final_prompt, text):
     return output
 
 # # 打开文件
-# with open('The Little Prince.txt', 'r', encoding='utf-8') as file:
+# with open('tester.txt', 'r', encoding='utf-8') as file:
 #     file_content = file.read()
-#
+
 # # 将文件内容传递给变量
 # text = file_content
 #
-# compress_prompt = "there was a very long text ,Your goal is to give a summary of this section so that a\
+# compress_prompt = """there was a very long text ,Your goal is to give a summary of this section so that a
 # reader will have a full understanding of what happened.
-# Your response should be at least three paragraphs and fully encompass what was said in the passage."
-# final_prompt = "You will be given a series of summaries,
+# Your response should be at least three paragraphs and fully encompass what was said in the passage."""
+# final_prompt = """You will be given a series of summaries,
 # Your goal is to give a verbose summary of what happened in the story.
 # The reader should be able to grasp what happened in the text.
-# "
+# """
 #
 # print(getReplay(text, final_prompt, compress_prompt))
