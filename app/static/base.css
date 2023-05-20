@@ -5,6 +5,10 @@ body {
     font-family: Arial, sans-serif;
 }
 
+ul {
+    padding: 0 !important;
+}
+
 .navbar {
     list-style-type: none;
     margin: 0;
@@ -38,6 +42,3 @@ body {
     margin-left: auto;
 }
 
-.content {
-    margin-top: 60px; /* So the content starts below the navbar */
-}

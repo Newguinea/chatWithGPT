@@ -1,0 +1,25 @@
+/*index.css*/
+img {
+    width: 100%;
+    height: auto;
+}
+
+.header {
+    color: fuchsia;
+}
+
+h3 {
+    font-size: 48px;
+}
+
+@media (min-width: 992px) {
+    h3 {
+        font-size: 64px;
+    }
+}
+
+@media (max-width: 576px) {
+    h3 {
+        font-size: 32px;
+    }
+}
