@@ -45,7 +45,7 @@ https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world
 ChatGPT Prompt Engineering for Developers:
 https://www.deeplearning.ai/short-courses/chatgpt-prompt-engineering-for-developers/
 
-flask test(this meteria is in Chinese): (Very good tutorial, love comes from porcelain)
+flask test(this materia is in Chinese): (Very good tutorial, love comes from porcelain)
 https://tutorial.helloflask.com/test/
 
 I'd like to extend my gratitude to a number of fellow students with whom we've battled day and night in the library, exchanging ideas and discussing concepts. Unfortunately, most of them do not wish their names to be written here. Regardless, I want to say sincerely, thank you all.
