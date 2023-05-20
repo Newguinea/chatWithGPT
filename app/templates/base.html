@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}Main Page{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}">
+</head>
+<body>
+    <ul class="navbar">
+        <li><a href="{{ url_for('index') }}">Home</a></li>
+        <li><a href="{{ url_for('longtextProcess') }}">LongText</a></li>
+        <li><a href="{{ url_for('chat') }}">NormalChat</a></li>
+        <li><a href="{{ url_for('dnd') }}">DND</a></li>
+        <li class="logout"><a href="{{ url_for('logout') }}">Logout</a></li>
+    </ul>
+
+    <div class="content">
+        <h1>{% block heading %}{% endblock %}</h1>
+
+        {% block content %}
+        {% endblock %}
+    </div>
+
+</body>
+</html>

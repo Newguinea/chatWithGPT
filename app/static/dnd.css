@@ -8,9 +8,12 @@ body {
     display: flex;
     flex-direction: column;
     height: 100vh;
+    justify-content: space-between;  /* Aligns children vertically */
 }
 
 .start-play-btn {
+    position: sticky; /* Sticky positioning */
+    top: 0; /* Stick to the top */
     align-self: flex-end;
     margin: 10px;
     padding: 10px;
@@ -19,17 +22,58 @@ body {
     background-color: #4CAF50;
     color: white;
     cursor: pointer;
+    z-index: 1; /* Ensure it stays above other elements */
 }
 
 .chat-history {
+    position: relative; /* Required for pseudo-element */
     flex-grow: 1;
     overflow-y: auto;
     padding: 10px;
     border-bottom: 1px solid #ddd;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Shadow around the chat history */
+}
+
+.chat-history:before {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 100px 100px 100px;
+    border-color: transparent transparent #fff transparent;
+    border-radius: 5px; /* Slightly rounded corners */
+    transform: rotate(45deg);
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.chat-input-container {
+    display: flex; /* Make this a flex container */
+    justify-content: center; /* Center children horizontally */
+    align-items: center; /* Center children vertically */
+    position: fixed; /* Fixed positioning */
+    bottom: 0; /* Position at the bottom */
+    left: 0;
+    right: 0;
+    padding: 10px;
+    background: #f1f1f1;
 }
 
 .chat-input {
+    flex-grow: 1; /* Will take up all available space */
     padding: 10px;
     border: none;
     border-top: 1px solid #ddd;
+    margin-right: 10px;
+}
+
+.send-btn {
+    padding: 10px 20px;
+    border: none;
+    background: #007bff;
+    color: white;
+    cursor: pointer;
 }

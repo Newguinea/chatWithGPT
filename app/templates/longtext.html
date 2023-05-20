@@ -1,34 +1,47 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Upload and Process File</title>
-    <link rel="stylesheet" type="text/css" href="static/css/longtext.css">
-</head>
-<body>
-<div id="content">
-    <div id="sidebar">
-        <h2>history</h2>
-        <!-- 历史记录部分 -->
-    </div>
+{% extends "base.html" %}
 
-    <div id="main-content">
-        <h2>upload the file</h2>
-        <form id="upload-form" action="{{ url_for('longtextProcess') }}" method="POST" enctype="multipart/form-data">
-            {{ form.hidden_tag() }}  <!-- 添加这一行 -->
-            {{ form.file.label }}<br>
-            {{ form.file }}<br>
-            <h2>input</h2>
-            {{ form.final_prompt.label }}<br>
-            {{ form.final_prompt }}<br>
-            {{ form.compress_prompt.label }}<br>
-            {{ form.compress_prompt }}<br>
-            <input type="submit" value="Start Process">
+{% block title %}
+    Upload and Process File
+{% endblock %}
+
+{% block heading %}
+    Upload and Process File
+{% endblock %}
+
+{% block content %}
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <div class="container">
+        <h2 class="my-3 text-center">Upload the File</h2>
+        <form id="upload-form" action="{{ url_for('longtextProcess') }}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+                {{ form.file }}
+            </div>
+
+            <h2 class="my-3 text-center">Input</h2>
+            <div class="row">
+                <div class="col-md-6 form-group">
+                    {{ form.final_prompt.label }}<br>
+                    {{ form.final_prompt(class="form-control") }}<br>
+                </div>
+                <div class="col-md-6 form-group">
+                    {{ form.compress_prompt.label }}<br>
+                    {{ form.compress_prompt(class="form-control") }}<br>
+                </div>
+            </div>
+            <div class="form-group text-center">
+                <input type="submit" class="btn btn-primary" value="Start Process">
+            </div>
         </form>
+
         {% if replay %}
-            <h2>Result</h2>
-            <p>{{ replay }}</p>
+            <div class="mt-5">
+                <h2>Result</h2>
+                <p class="border border-primary p-2">{{ replay }}</p>
+            </div>
         {% endif %}
     </div>
-</div>
-</body>
-</html>
+{% endblock %}
