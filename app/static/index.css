@@ -1,0 +1,38 @@
+/*index.css*/
+img {
+    width: 100%;
+    height: auto;
+}
+
+.header {
+    color: fuchsia;
+}
+
+h3 {
+    font-size: 48px;
+    color: black;
+}
+
+h3:link {
+    color: black;
+}
+
+p {
+    color: black;
+}
+
+p:link {
+    color: black;
+}
+
+@media (min-width: 992px) {
+    h3 {
+        font-size: 64px;
+    }
+}
+
+@media (max-width: 576px) {
+    h3 {
+        font-size: 32px;
+    }
+}
