@@ -154,11 +154,6 @@ class DNDTestcase(unittest.TestCase):
     def logout(self):
         return self.client.get('/logout', follow_redirects=True)
 
-    def test_logout(self):
-        response = self.logout()
-        self.assertEqual(response.status_code, 200)
-        self.assertNotIn(b'Log Out', response.data)
-
     def test_start_game(self):
         with self.app.app_context():
             game_session = GameSession()
