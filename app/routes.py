@@ -179,9 +179,6 @@ def longtextProcess():
         else:
             print("reply: (in routes)" + reply)
         form = LongtextForm(final_prompt=final_prompt, compress_prompt=compress_prompt)
-    # else:
-    #     print(form.errors)
-    #     print(request.files)
     return render_template('longtext.html', form=form, replay=reply)
 
 
@@ -202,7 +199,5 @@ def start():
 @login_required
 def message():
     prompt = request.json.get('prompt')
-    print(prompt)
     response = DND.get_completion(prompt)
-    print(response)
     return jsonify(response)
