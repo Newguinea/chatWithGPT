@@ -1,3 +1,4 @@
+{#chat.html#}
 {% extends "base.html" %}
 
 {% block title %}
@@ -8,7 +9,6 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="{{ url_for('static', filename='chat.js') }}"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
-
     <link rel="stylesheet" href="{{ url_for('static', filename='chat.css') }}">
 
     <div class="chat-container">
@@ -19,7 +19,6 @@
                 <li>Chat 2</li>
                 <li>Chat 3</li>
             </ul>
-            <div class="user-info">Logged in as John</div>
         </div>
         <div class="chat-content">
             <div class="chat-history">
