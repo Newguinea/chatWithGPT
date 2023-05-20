@@ -3,6 +3,12 @@ from langchain.chat_models import ChatOpenAI
 from langchain import OpenAI
 from langchain import PromptTemplate
 from langchain.chains.summarize import load_summarize_chain
+from langchain import OpenAI
+import os
+from dotenv import load_dotenv, find_dotenv
+
+_ = load_dotenv(find_dotenv())  # read local .env file
+openai_api_key = os.getenv("openai_api_key")
 
 openai_api_key = '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'
 llm = OpenAI(temperature=0, openai_api_key=openai_api_key)

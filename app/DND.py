@@ -6,8 +6,8 @@ import os
 from dotenv import load_dotenv, find_dotenv
 
 _ = load_dotenv(find_dotenv())  # read local .env file
-openai_api_key = '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'
-openai.api_key = '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'
+openai_api_key = os.getenv("openai_api_key")
+openai.api_key = os.getenv("openai.api_key")
 class GameSession:
     def __init__(self):
         self.messagesShow = []
