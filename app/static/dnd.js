@@ -27,3 +27,10 @@ $('#send-btn').click(function () {
         }
     });
 });
+
+$('#chat-input').keydown(function(event) {
+    if (event.keyCode === 13 && !event.shiftKey) {
+        event.preventDefault();
+        $('#send-btn').click();
+    }
+});

@@ -12,12 +12,12 @@ class GameSession:
     def __init__(self):
         self.messagesShow = []
         self.messagesSend = []
-        self.chatCount = 0  # 新添加的属性，用于记录对话数量
+        self.chatCount = 0  # count the number of chat
 
     #when receive message use this function
     def get_completion(self, prompt, model="gpt-3.5-turbo"):
         self.messagesShow.append({"role": "user", "content": prompt})
-        self.messagesSend.append({"role": "user", "content": prompt + str(self.chatCount)})
+        self.messagesSend.append({"role": "user", "content": prompt})
         self.messagesSend = self.getMessages()
         response = openai.ChatCompletion.create(
             model=model,
@@ -27,8 +27,9 @@ class GameSession:
         # Add assistant's response to the message list
         aiReturn = response.choices[0].message["content"]
         self.chatCount += 1  # 在AI回复后增加对话计数器的值
-        self.messagesSend.append({"role": "assistant", "content": aiReturn})
+        self.messagesSend.append({"role": "assistant", "content": aiReturn + str(self.chatCount)})
         self.messagesShow.append({"role": "assistant", "content": aiReturn})
+        print(str(self.messagesSend))
         return aiReturn
 
     #press the button start or restrat the game
@@ -42,25 +43,20 @@ class GameSession:
         Generate a random character for me with a name, rank, personality traits, and items to carry, 
         Now, set the opening scene for our adventure. and ask a question related to this game, as a host of this game\
         you need to chat with the player and ask the player choice, and player should be making progress step by step\
-        you should make 10 - 20 times response untill game end. as the limit of 4096 token, speed of your replay, so\
-        I send your mesaages with limit 2000 tokens message length, if the message is too long, it will cut the \
-        the thired message in message list, and you can see in the end of user prompt has a count number, that is the \
-        number of times the user reply, {"role": "user", "content": "prompt3")}, that 3 is means it is the 3 + 1 = 4\
-        The user's fourth response
+        you should make 10 - 20 times response until game end.
         
         refer to the format below Generate your first output
-        ```{format}```
         
-        format = ```Name: Thalia Ravenshadow
+        Name: Thalia Ravenshadow
         Rank: Rogue
         Personality Traits: Quick-witted, cautious, and resourceful
         Items: Dagger, lockpicks, a small vial of poison, and a hooded cloak
         
         Scene for your adventure:
         
-        You find yourself standing at the entrance of a dense forest known as the Whispering Woods. The towering trees loom\
-         overhead, their ancient branches reaching out like skeletal fingers. The air is thick with an eerie silence, \
-         broken only by the occasional hoot of an owl or the rustling of leaves underfoot.
+        You find yourself standing at the entrance of a dense forest known as the Whispering Woods. The towering trees \
+        loom overhead, their ancient branches reaching out like skeletal fingers. The air is thick with an eerie\
+        silence, broken only by the occasional hoot of an owl or the rustling of leaves underfoot.
         
         As you take your first step into the forest, the world around you seems to change. The daylight struggles to \
         penetrate the dense canopy, casting long shadows that dance between the trees. The path ahead is barely \
@@ -75,7 +71,7 @@ class GameSession:
         Near the fire, you notice a torn piece of parchment with a hastily scrawled message: \
         "Beware the Whispering Woods. Danger lurks within."
         
-        What would you like to do, Thalia Ravenshadow?```'''
+        What would you like to do, Thalia Ravenshadow?'''
         firstAimessage = self.get_completion(prompt=starter)
         # del self.messagesSend[0] #first prompt is very large, reduce speace
         # del self.messagesShow[0]  # first prompt is very large, reduce speace
