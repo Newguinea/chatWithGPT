@@ -83,16 +83,16 @@ $(document).ready(function () {
         createNewChat();
     });
 
-    $(".chat-input button").on('click', function () {
+    $(".chat-input-container button").on('click', function () {
         var chatId = $(".chat-select li.active").data("id");
-        var content = $(".chat-input textarea").val();
+        var content = $(".chat-input-container textarea").val();
         if (content.trim() !== '') {
             sendMessage(chatId, content);
-            $(".chat-input textarea").val('');
+            $(".chat-input-container textarea").val('');
         }
     });
 
-    $(".chat-input textarea").keydown(function (event) {
+    $(".chat-input-container textarea").keydown(function (event) {
         // Checks if the enter key is pressed
         if (event.key === "Enter") {
             // Check if the Shift key is pressed at the same time
