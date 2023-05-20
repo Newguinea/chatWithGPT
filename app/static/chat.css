@@ -59,16 +59,14 @@
 }
 
 .chat-input {
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    flex-grow: 1; /* Will take up all available space */
     padding: 10px;
-    height: 60px;
-    overflow: auto;
-    display: flex;
-    align-items: center;
+    border: none;
+    border-top: 1px solid #ddd;
+    margin-right: 10px;
 }
 
-.chat-input input[type="text"] {
+.chat-input textarea {
     border: none;
     outline: none;
     height: 100%;
@@ -77,13 +75,22 @@
     font-size: 16px;
 }
 
-.chat-input button {
+.chat-input-container {
+    display: flex; /* Make this a flex container */
+    justify-content: center; /* Center children horizontally */
+    align-items: center; /* Center children vertically */
+    position: fixed; /* Fixed positioning */
+    bottom: 0; /* Position at the bottom */
+    left: 0;
+    right: 0;
+    padding: 10px;
+    background: #f1f1f1;
+}
+.send-btn {
+    padding: 10px 20px;
     border: none;
-    outline: none;
-    height: 100%;
-    background-color: #007bff;
-    color: #fff;
-    font-size: 16px;
+    background: #007bff;
+    color: white;
     cursor: pointer;
 }
 
