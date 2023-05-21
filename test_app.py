@@ -2,6 +2,8 @@ import unittest
 from app import app, db, login_manager
 from app.models import User, Chat, Message
 from flask_login import login_user, logout_user, login_required, current_user
+from app.DND import GameSession
+from app.longtext import *
 
 class LoginTestCase(unittest.TestCase):
     def setUp(self):
@@ -119,3 +121,114 @@ class ChatTestCase(unittest.TestCase):
             # Verify the chat is deleted
             response = self.client.get(f'/api/chats/{chat_id}/messages')
             self.assertEqual(response.status_code, 404)
+
+class DNDTestcase(unittest.TestCase):
+    def setUp(self):
+        app.config['TESTING'] = True
+        app.config['WTF_CSRF_ENABLED'] = False
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
+
+        self.app = app
+        self.client = app.test_client()
+
+        with self.app.app_context():
+            db.create_all()
+
+            self.user = User(username='test')
+            self.user.set_password('test_password')
+            db.session.add(self.user)
+            db.session.commit()
+            self.login()
+
+    def tearDown(self):
+        with self.app.app_context():
+            db.session.remove()
+            db.drop_all()
+
+    def login(self):
+        self.client.post('/login', data=dict(
+            username='test',
+            password='test_password'
+        ), follow_redirects=True)
+
+    def logout(self):
+        return self.client.get('/logout', follow_redirects=True)
+
+    def test_start_game(self):
+        with self.app.app_context():
+            game_session = GameSession()
+            first_ai_message = game_session.startGame()
+            self.assertIsNotNone(first_ai_message)
+            self.assertIsInstance(first_ai_message, str)
+
+    def test_get_completion(self):
+        with self.app.app_context():
+            game_session = GameSession()
+            prompt = "You find a treasure chest. What do you do?"
+            ai_response = game_session.get_completion(prompt)
+            self.assertIsNotNone(ai_response)
+            self.assertIsInstance(ai_response, str)
+
+class LongTextTestCase(unittest.TestCase):
+    def setUp(self):
+        app.config['TESTING'] = True
+        app.config['WTF_CSRF_ENABLED'] = False
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
+
+        self.app = app
+        self.client = app.test_client()
+
+        with self.app.app_context():
+            db.create_all()
+
+            self.user = User(username='test')
+            self.user.set_password('test_password')
+            db.session.add(self.user)
+            db.session.commit()
+            self.login()
+
+    def tearDown(self):
+        with self.app.app_context():
+            db.session.remove()
+            db.drop_all()
+
+    def login(self):
+        self.client.post('/login', data=dict(
+            username='test',
+            password='test_password'
+        ), follow_redirects=True)
+
+    def logout(self):
+        return self.client.get('/logout', follow_redirects=True)
+
+    def test_get_reply(self):
+        with self.app.app_context():
+            text = "This is a long text for testing purposes."
+            final_prompt = "What do you think about this text?"
+            compress_prompt = "Please compress the text and provide key information."
+
+            response = getReply(text, final_prompt, compress_prompt)
+
+            self.assertIsNotNone(response)
+            self.assertIsInstance(response, str)
+
+    def test_compress_text(self):
+        with self.app.app_context():
+            text = "This is a long text for testing purposes."
+            compress_prompt = "Please compress the text and provide key information."
+            final_prompt = "What do you think about this text?"
+
+            compressed_text = compressText(text, compress_prompt, final_prompt)
+
+            self.assertIsNotNone(compressed_text)
+            self.assertIsInstance(compressed_text, str)
+
+    def test_final_prompt(self):
+        with self.app.app_context():
+            text = "This is a long text for testing purposes."
+            final_prompt = "What do you think about this text?"
+
+            output = finalPrompt(final_prompt, text)
+
+            self.assertIsNotNone(output)
+            self.assertIsInstance(output, str)
