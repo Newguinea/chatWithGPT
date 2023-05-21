@@ -49,7 +49,7 @@ def load_user(user_id):
 def chat():
     return render_template('chat.html')
 
-
+# Define route for the registration page and functionality
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegisterForm()
@@ -62,7 +62,7 @@ def register():
         return redirect(url_for('login'))
     return render_template('register.html', form=form)
 
-
+# Define route for getting chat data for the current user
 @app.route('/api/chats', methods=['GET'])
 @login_required
 def get_chats():
@@ -104,7 +104,7 @@ def get_messages(chat_id):
         for message in messages
     ])
 
-
+# Define route for sending a message in a chat
 @app.route('/api/chats/<int:chat_id>/messages', methods=['POST'])
 @login_required
 def send_message(chat_id):

@@ -10,6 +10,7 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(80), unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
 
+    # User model: Contains information for each user, including their id, username, and hashed password.
     def __repr__(self):
         return '<User {}>'.format(self.username)
     def set_password(self, password):
@@ -18,6 +19,7 @@ class User(UserMixin, db.Model):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
+# Chat model: Contains information about individual chats, including the id, user id, timestamp, context, and completion status.
 class Chat(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
@@ -25,6 +27,7 @@ class Chat(db.Model):
     context = db.Column(db.Text, nullable=False)
     is_complete = db.Column(db.Boolean, nullable=False)
 
+# Message model: Contains information about individual messages in chats, including the id, chat id, user id, timestamp, text, and response status.
 class Message(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     chat_id = db.Column(db.Integer, db.ForeignKey('chat.id'), nullable=False)
