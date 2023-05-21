@@ -3,18 +3,20 @@
 ## Purpose and design of the project
 
 This web application is designed to provide interactive experiences and services powered by OpenAI's GPT-3.5 model through the ChatGPT API. It features three main components, each serving a unique purpose, to provide users with versatile ways of leveraging the capabilities of the AI model.
-1. Normal chat
-2. Summary a book(longtext processing)
-3. DND game(Dungeons and Dragons
+1. AIOracle
 
-### Normal chat
-The first component is the "Normal Chat". Here, users can engage in a conversation with the AI model, similar to a chatbot. This component allows users to ask questions, request information, or just have a friendly chat, showcasing the conversational ability of the GPT-4 model.
+2. Purify
 
-### Summary a book
-The second component is the "Book Summary" feature. This feature allows users to upload a text file containing a long story, and the AI model will generate a concise summary of the content. It's a powerful tool for quickly understanding the main points of a lengthy text, ideal for students, researchers, or anyone dealing with extensive reading materials.
+3. AdventureCraft
 
-### DND game
-The third component is the "DnD Game", an interactive game built around the classic Dungeons & Dragons theme. In this game, the AI model takes on the role of the game master, guiding users through the game by asking them to make decisions at key points. This showcases the imaginative storytelling and interactive capabilities of the AI model, providing a unique gaming experience for users.
+### AIOracle
+The first component is the "AIOracle". Here, users can engage in a conversation with the AI model, similar to a chatbot. This component allows users to ask questions, request information, or just have a friendly chat, showcasing the conversational ability of the GPT-4 model.
+
+### Purify
+The second component is the "Purify" feature. This feature allows users to upload a text file containing a long story, and the AI model will generate a concise summary of the content. It's a powerful tool for quickly understanding the main points of a lengthy text, ideal for students, researchers, or anyone dealing with extensive reading materials.
+
+### AdventureCraft
+The third component is the "AdventureCraft", an interactive game built around the classic Dungeons & Dragons theme. In this game, the AI model takes on the role of the game master, guiding users through the game by asking them to make decisions at key points. This showcases the imaginative storytelling and interactive capabilities of the AI model, providing a unique gaming experience for users.
 
 Each of these components is designed with an easy-to-use interface and leverages the powerful capabilities of the GPT-4 model to provide useful and entertaining experiences for users.
 
