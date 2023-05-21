@@ -31,16 +31,14 @@ class LoginTestCase(unittest.TestCase):
         password_input = self.driver.find_element_by_id('password')
 
         # Enter the username and password
-        username_input.send_keys('test')
-        password_input.send_keys('test_password')
+        username_input.send_keys('dddd')
+        password_input.send_keys('dddd')
 
         # Submit the login form
         password_input.send_keys(Keys.RETURN)
-
-        # Check if the page contains the expected text
-        main_page_text = self.driver.find_element_by_tag_name('body').text
-        self.assertIn('Main Page', main_page_text)
-
+        #checks if at the home page
+        home_page_url = 'http://127.0.0.1:5000/index'  # Replace with the URL of the home page
+        self.assertEqual(self.driver.current_url, home_page_url)
 class ChatSeleniumTestCase(unittest.TestCase):
     def setUp(self):
         chromedriver_path = os.getenv('CHROMEDRIVER_PATH')
@@ -56,8 +54,8 @@ class ChatSeleniumTestCase(unittest.TestCase):
         password_input = self.driver.find_element_by_id('password')
 
         # Enter the username and password
-        username_input.send_keys('test')
-        password_input.send_keys('test_password')
+        username_input.send_keys('dddd')
+        password_input.send_keys('dddd')
 
         # Submit the login form
         password_input.send_keys(Keys.RETURN)
@@ -102,8 +100,9 @@ class DNDTestCase(unittest.TestCase):
         password_input = self.driver.find_element_by_id('password')
 
         # Enter the username and password
-        username_input.send_keys('test')
-        password_input.send_keys('test_password')
+        username_input.send_keys('dddd')
+        password_input.send_keys('dddd')
+
 
         # Submit the login form
         password_input.send_keys(Keys.RETURN)
@@ -139,7 +138,7 @@ class longTextTestCase(unittest.TestCase):
     def setUp(self):
         chromedriver_path = os.getenv('CHROMEDRIVER_PATH')
         self.driver = webdriver.Chrome(executable_path=chromedriver_path)  # WebDriver for browser
-        self.driver.get('http://127.0.0.1:5000/login')  # Replace with the URL of your Flask application
+        self.driver.get('http://127.0.0.1:5000/login')
 
     def tearDown(self):
         self.driver.quit()
@@ -149,13 +148,14 @@ class longTextTestCase(unittest.TestCase):
         current_dir = os.getcwd()
         # create absolute file path
         file_path = os.path.join(current_dir, 'app', 'tester.txt')
+
         # Find the username and password input fields
         username_input = self.driver.find_element_by_id('username')
         password_input = self.driver.find_element_by_id('password')
 
         # Enter the username and password
-        username_input.send_keys('test')
-        password_input.send_keys('test_password')
+        username_input.send_keys('dddd')
+        password_input.send_keys('dddd')
 
         # Submit the login form
         password_input.send_keys(Keys.RETURN)

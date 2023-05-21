@@ -2,9 +2,30 @@
 
 ## a project develop based on chatGPT api
 
-1. normal chat
-2. summary a book(longtext processing)
+1. Normal chat
+2. Summary a book(longtext processing)
 3. DND game(Dungeons and Dragons
+
+##
+
+## Application Architecture
+Our web application adopts a 3-tier architecture: the Presentation Layer, the Business Logic Layer, and the Data Access Layer. 
+
+### Presentation Layer
+The user interface is built with HTML and CSS, enhanced with Bootstrap for responsive and modern design and jQuery for interactive elements. These technologies provide users with an interactive and intuitive environment to interact with our application across different devices.
+
+### Business Logic Layer
+The server-side of our application is powered by Flask, a lightweight and flexible Python web framework. Flask takes care of routing, handling HTTP requests and responses, and serves as a bridge between the user interface and our database.
+
+### Data Access Layer
+The data access layer interacts with our SQLite database, where all user information and other data are stored and managed. It is responsible for performing all CRUD (Create, Read, Update, Delete) operations on the data, as required by the Business Logic Layer.
+
+### Flow of Control
+1. Users interact with the Presentation Layer (the HTML/CSS interface, enhanced with Bootstrap and jQuery).
+2. User actions trigger HTTP requests, which are sent from the Presentation Layer to the Business Logic Layer (Flask).
+3. Flask processes the requests and interacts with the Data Access Layer if necessary (e.g., reading from or writing to the SQLite database).
+4. The results (data or status messages) are sent back from Flask to the Presentation Layer.
+5. The Presentation Layer updates the user interface based on the results, showing the most up-to-date data or status messages to the user.
 
 ## Installation and Usage Guide: 
 
@@ -14,7 +35,7 @@ First, make sure that Python and pip are installed on your system. If they are n
 
 All the dependencies for this project are listed in the requirements.txt file. You can install these dependencies by running the following command:
 
-pip install -r requirements.txt
+pip install -r requirements.txt (we expected this program to be run in the venv with python version 3.10)
 
 ### Usage
 

@@ -18,8 +18,8 @@ class LoginTestCase(unittest.TestCase):
         with self.app.app_context():
             db.create_all()
 
-            self.user = User(username='test')
-            self.user.set_password('test_password')
+            self.user = User(username='dddd')
+            self.user.set_password('dddd')
             db.session.add(self.user)
             db.session.commit()
 
@@ -53,8 +53,8 @@ class ChatTestCase(unittest.TestCase):
         with self.app.app_context():
             db.create_all()
 
-            self.user = User(username='test')
-            self.user.set_password('test_password')
+            self.user = User(username='dddd')
+            self.user.set_password('dddd')
             db.session.add(self.user)
             db.session.commit()
             self.login()
@@ -134,8 +134,8 @@ class DNDTestcase(unittest.TestCase):
         with self.app.app_context():
             db.create_all()
 
-            self.user = User(username='test')
-            self.user.set_password('test_password')
+            self.user = User(username='dddd')
+            self.user.set_password('dddd')
             db.session.add(self.user)
             db.session.commit()
             self.login()
@@ -181,8 +181,8 @@ class LongTextTestCase(unittest.TestCase):
         with self.app.app_context():
             db.create_all()
 
-            self.user = User(username='test')
-            self.user.set_password('test_password')
+            self.user = User(username='dddd')
+            self.user.set_password('dddd')
             db.session.add(self.user)
             db.session.commit()
             self.login()
