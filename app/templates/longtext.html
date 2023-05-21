@@ -1,11 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}
-    <h1>Upload and Process File</h1>
-{% endblock %}
-
-{% block heading %}
-    <h1 class="ml-3">Upload and Process File</h1>
+    Purify
 {% endblock %}
 
 {% block content %}
@@ -27,36 +23,47 @@
             integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
             crossorigin="anonymous"></script>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='longText.css') }}">
+
     <div class="container">
-        <h2 class="my-3 text-center">Upload the File</h2>
-        <form id="upload-form" action="{{ url_for('longtextProcess') }}" method="POST" enctype="multipart/form-data"
-              class="needs-validation" novalidate>
-            {{ form.hidden_tag() }}
-            <div class="form-group">
-                {{ form.file }}
+        <div class="row">
+            <div class="col-sm" style="background-color: RGB(217, 245, 255)">
+                <h1 class="ml-3">Purify</h1>
+                <p>As it stands, OpenAI permits users to send messages that are no longer than 4096 tokens. To accommodate this, we've designed a unique solution - <b>Purify</b>. This powerful tool can even condense a full-length bookinto a single paragraph.</p>
             </div>
+            <div class="col-sm" style="background-color: RGB(176, 211, 245)">
+                <h2 class="my-3 text-center">Upload the File</h2>
+                <form id="upload-form" action="{{ url_for('longtextProcess') }}" method="POST"
+                      enctype="multipart/form-data"
+                      class="needs-validation" novalidate>
+                    {{ form.hidden_tag() }}
+                    <div class="form-group">
+                        {{ form.file }}
+                    </div>
 
-            <h2 class="my-3 text-center">Input</h2>
-            <div class="row">
-                <div class="col-md-6 form-group">
-                    {{ form.final_prompt.label }}<br>
-                    {{ form.final_prompt(class="form-control") }}<br>
-                </div>
-                <div class="col-md-6 form-group">
-                    {{ form.compress_prompt.label }}<br>
-                    {{ form.compress_prompt(class="form-control") }}<br>
-                </div>
+                    <h2 class="my-3 text-center">Input</h2>
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            {{ form.final_prompt.label }}<br>
+                            {{ form.final_prompt(class="form-control") }}<br>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            {{ form.compress_prompt.label }}<br>
+                            {{ form.compress_prompt(class="form-control") }}<br>
+                        </div>
+                    </div>
+                    <div class="form-group text-center">
+                        <input type="submit" class="btn btn-primary" value="Start Process">
+                    </div>
+                </form>
             </div>
-            <div class="form-group text-center">
-                <input type="submit" class="btn btn-primary" value="Start Process">
+            <div class="col-sm" style="background-color: RGB(150, 178, 255)">
+                {% if replay %}
+                    <div class="mt-5">
+                        <h2>Result</h2>
+                        <p class="border border-primary p-2">{{ replay }}</p>
+                    </div>
+                {% endif %}
             </div>
-        </form>
-
-        {% if replay %}
-            <div class="mt-5">
-                <h2>Result</h2>
-                <p class="border border-primary p-2">{{ replay }}</p>
-            </div>
-        {% endif %}
+        </div>
     </div>
 {% endblock %}
