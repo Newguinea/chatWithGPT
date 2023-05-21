@@ -18,4 +18,4 @@ from app.DND import GameSession
 
 DND = GameSession()
 
-from app import routes, models
+from app import routes, models, errors

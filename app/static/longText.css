@@ -1,13 +1,10 @@
 body {
     font-family: Arial, sans-serif;
+    background-color: RGB(242, 242, 253);
 }
 
 .page-heading {
     margin-left: 10px;
-}
-
-.container {
-    max-width: 800px;
 }
 
 h2 {
@@ -15,9 +12,50 @@ h2 {
 }
 
 p {
-    white-space: pre-wrap;  /* For preserving new lines in the text */
+    white-space: pre-wrap; /* For preserving new lines in the text */
+    margin-bottom: 30%;
 }
 
 h1 {
     margin-left: 3%;
+    margin-top: 20%;
+    margin-bottom: 30%;
+    font-size: 60px;
+}
+
+h2 {
+    font-size: 48px;
+    padding-top: 15%;
+    padding-bottom: 15%;
+}
+
+h3 {
+    font-size: 48px;
+    margin-top: 20%;
+    padding-bottom: 15%;
+    color: RGB(23, 33, 173);
+    text-align:center;
+}
+
+.col-lg-4 {
+    padding-top: 3%;
+    height: calc(100vh - 68px);
+    padding-left: 4%;
+    padding-right: 4%;
+}
+
+.container {
+    background-color: RGB(242, 242, 253);
+}
+
+html {
+    background-color: RGB(242, 242, 253);
+}
+
+.startProcess {
+    margin-top: 15%;
+}
+
+.content {
+
 }

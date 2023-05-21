@@ -4,10 +4,6 @@
     DND
 {% endblock %}
 
-{% block heading %}
-    <h1>DND</h1>
-{% endblock %}
-
 {% block content %}
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dnd.css') }}">
     <link
@@ -27,7 +23,12 @@
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
     <div class="chat-container">
-        <button class="start-play-btn">Start Play</button>
+        <div class="background" style="background-image: url({{ url_for('static', filename='images/dnd2.jpg') }});">
+            <div>
+                <h1>Dungeons & Dragons</h1>
+                <button class="start-play-btn">Start Play</button>
+            </div>
+        </div>
         <div class="chat-history" id="chat-history">
             <!-- 聊天记录将在这里显示 -->
         </div>
