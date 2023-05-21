@@ -2,9 +2,8 @@
 
 /* 设置页面布局样式 */
 .chat-container {
-    margin-top: 46px;
     display: flex;
-    height: calc(100vh - 59px);
+    height: calc(100vh - 78px);
 }
 
 /* 设置左侧聊天选择栏的样式 */
@@ -40,7 +39,7 @@
 .chat-content {
     float: left;
     width: 80%;
-    height: calc(100% - 40px);
+    height: calc(100% - 63px);
 }
 
 .chat-history {

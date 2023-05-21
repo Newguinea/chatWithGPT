@@ -11,7 +11,7 @@ ul {
 
 .navbar {
     list-style-type: none;
-    margin: 0;
+    margin-left: 0;
     padding: 0;
     overflow: hidden;
     background-color: #f1f1f1;
@@ -41,3 +41,10 @@ ul {
     margin-left: auto;
 }
 
+.navbar-nav li a {
+  color: RGB(230, 230, 230); /* 更改链接的颜色，可以替换为您想要的颜色 */
+}
+
+.navbar-brand {
+    margin-left: 3%;
+}
