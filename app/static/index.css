@@ -36,3 +36,10 @@ p:link {
         font-size: 32px;
     }
 }
+
+.text-intro {
+    position: absolute;
+    top: 45%;
+    left: 25%;
+    width: 75%;
+}
