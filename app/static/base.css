@@ -41,3 +41,6 @@ ul {
     margin-left: auto;
 }
 
+.navbar-nav li a {
+  color: RGB(230, 230, 230); /* 更改链接的颜色，可以替换为您想要的颜色 */
+}
