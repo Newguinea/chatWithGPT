@@ -1,6 +1,3 @@
-.content {
-    margin-top: 50px;
-}
 
 body {
     margin: 0;
@@ -11,8 +8,8 @@ body {
 .chat-container {
     display: flex;
     flex-direction: column;
-    height: calc(100vh - 181px);
-    justify-content: space-between;  /* Aligns children vertically */
+    justify-content: space-between; /* Aligns children vertically */
+    background-color: RGB(100,117,140);
 }
 
 .start-play-btn {
@@ -23,23 +20,24 @@ body {
     padding: 10px;
     border: none;
     border-radius: 5px;
-    background-color: #4CAF50;
-    color: white;
+    background-color: RGB(245, 163, 120);
+    color: black;
     cursor: pointer;
     z-index: 1; /* Ensure it stays above other elements */
+    margin-left: 3%;
+    margin-bottom: 3%;
 }
 
 .chat-history {
     position: relative; /* Required for pseudo-element */
     flex-grow: 1;
     overflow-y: auto;
-    padding-top: 10px;
+    padding-top: 20px;
     padding-left: 10%;
     padding-right: 10%;
-    border-bottom: 1px solid #ddd;
-    background-color: #fff;
-    padding-bottom: 50px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Shadow around the chat history */
+    margin-bottom: 65px;
+
+    /*padding-bottom: 50px;*/
 }
 
 .chat-history:before {
@@ -58,25 +56,49 @@ body {
     left: 0;
     right: 0;
     padding: 10px;
-    background: #f1f1f1;
+    background: RGB(160,160,160);
 }
 
 .chat-input {
     flex-grow: 1; /* Will take up all available space */
     padding: 10px;
     border: none;
-    border-top: 1px solid #ddd;
+    border-top: 1px solid RGB(255, 47, 12);
     margin-right: 10px;
+    background-color: gray;
+    color: RGB(23,23,23);
+    outline: none; /* Remove the black outline */
+    cursor: text; /* Changes the cursor to a text cursor */
 }
 
 .send-btn {
     padding: 10px 20px;
     border: none;
-    background: #007bff;
+    border-radius: 5px;
+    background-color: RGB(245, 163, 120);
     color: white;
     cursor: pointer;
 }
 
 h1 {
     margin-left: 3%;
+    color: white !important;
+}
+
+.background {
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* 此处将标题和按钮定位在图片上方 */
+}
+
+.chat-input:focus {
+    background-color: lightgray; /* Change background color on focus */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.15); /* Add a subtle shadow on focus */
+    border-top: 0px solid RGB(255, 47, 12);
+}
+
+html{
+    background-color: RGB(100, 117, 140);
 }
