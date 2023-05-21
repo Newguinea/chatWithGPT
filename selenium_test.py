@@ -7,7 +7,6 @@ from selenium.webdriver.support.ui import WebDriverWait  # Correct import for We
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 
-# Your application-specific imports
 from app import app, db, login_manager
 from app.models import User, Chat, Message
 from flask_login import login_user, logout_user, login_required, current_user
@@ -20,7 +19,7 @@ class LoginTestCase(unittest.TestCase):
     def setUp(self):
         chromedriver_path = os.getenv('CHROMEDRIVER_PATH')
         self.driver = webdriver.Chrome(executable_path=chromedriver_path)  # Use the specified ChromeDriver executable path
-        self.driver.get('http://127.0.0.1:5000/login')  # Replace with the URL of your Flask application
+        self.driver.get('http://127.0.0.1:5000/login')
 
     def tearDown(self):
         self.driver.quit()
@@ -43,7 +42,7 @@ class ChatSeleniumTestCase(unittest.TestCase):
     def setUp(self):
         chromedriver_path = os.getenv('CHROMEDRIVER_PATH')
         self.driver = webdriver.Chrome(executable_path=chromedriver_path)  # WebDriver for browser
-        self.driver.get('http://127.0.0.1:5000/login')  # Replace with the URL of your Flask application
+        self.driver.get('http://127.0.0.1:5000/login')
 
     def tearDown(self):
         self.driver.quit()
@@ -89,7 +88,7 @@ class DNDTestCase(unittest.TestCase):
     def setUp(self):
         chromedriver_path = os.getenv('CHROMEDRIVER_PATH')
         self.driver = webdriver.Chrome(executable_path=chromedriver_path)  # WebDriver for browser
-        self.driver.get('http://127.0.0.1:5000/login')  # Replace with the URL of your Flask application
+        self.driver.get('http://127.0.0.1:5000/login')
 
     def tearDown(self):
         self.driver.quit()

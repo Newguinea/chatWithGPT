@@ -7,7 +7,7 @@ from app.longtext import *
 
 class LoginTestCase(unittest.TestCase):
     def setUp(self):
-        # Configure your app to use testing configuration
+        # Configure the app to use testing configuration
         app.config['TESTING'] = True
         app.config['WTF_CSRF_ENABLED'] = False
         app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
