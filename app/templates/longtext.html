@@ -23,14 +23,17 @@
             integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
             crossorigin="anonymous"></script>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='longText.css') }}">
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
     <div class="container">
         <div class="row">
-            <div class="col-sm" style="background-color: RGB(217, 245, 255)">
+            <div class="col-lg-4" style="background-color: RGB(217, 245, 255)">
                 <h1 class="ml-3">Purify</h1>
-                <p>As it stands, OpenAI permits users to send messages that are no longer than 4096 tokens. To accommodate this, we've designed a unique solution - <b>Purify</b>. This powerful tool can even condense a full-length bookinto a single paragraph.</p>
+                <p>As it stands, OpenAI permits users to send messages that are no longer than 4096 tokens. <br>
+To accommodate this, we've designed a unique solution - <b>Purify</b>.<br>
+This powerful tool can even condense a full-length bookinto a single paragraph.</p>
+                <p style="font-size: 50px; text-align:center;"><i class="bi bi-file-earmark-check-fill"> </i><i class="bi bi-arrow-bar-right"></i> <i class="bi bi-text-paragraph"></i></p>
             </div>
-            <div class="col-sm" style="background-color: RGB(176, 211, 245)">
+            <div class="col-lg-4" style="background-color: RGB(176, 211, 245)">
                 <h2 class="my-3 text-center">Upload the File</h2>
                 <form id="upload-form" action="{{ url_for('longtextProcess') }}" method="POST"
                       enctype="multipart/form-data"
@@ -40,7 +43,7 @@
                         {{ form.file }}
                     </div>
 
-                    <h2 class="my-3 text-center">Input</h2>
+                    <h2 class="my-3 text-center">Input Prompt</h2>
                     <div class="row">
                         <div class="col-md-6 form-group">
                             {{ form.final_prompt.label }}<br>
@@ -52,11 +55,12 @@
                         </div>
                     </div>
                     <div class="form-group text-center">
-                        <input type="submit" class="btn btn-primary" value="Start Process">
+                        <input type="submit" class="btn btn-primary startProcess" value="Start Process">
                     </div>
                 </form>
             </div>
-            <div class="col-sm" style="background-color: RGB(150, 178, 255)">
+            <div class="col-lg-4" style="background-color: RGB(150, 178, 255)">
+                <h3>Result</h3>
                 {% if replay %}
                     <div class="mt-5">
                         <h2>Result</h2>
