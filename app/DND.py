@@ -26,7 +26,7 @@ class GameSession:
         )
         # Add assistant's response to the message list
         aiReturn = response.choices[0].message["content"]
-        self.chatCount += 1  # 在AI回复后增加对话计数器的值
+        self.chatCount += 1  # count num of replies from ai
         self.messagesSend.append({"role": "assistant", "content": aiReturn + str(self.chatCount)})
         self.messagesShow.append({"role": "assistant", "content": aiReturn})
         print(str(self.messagesSend))
@@ -73,8 +73,7 @@ class GameSession:
         
         What would you like to do, Thalia Ravenshadow?'''
         firstAimessage = self.get_completion(prompt=starter)
-        # del self.messagesSend[0] #first prompt is very large, reduce speace
-        # del self.messagesShow[0]  # first prompt is very large, reduce speace
+
         return firstAimessage
 
     def getMessages(self):

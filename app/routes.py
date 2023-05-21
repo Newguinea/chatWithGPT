@@ -26,10 +26,10 @@ def login():
         user = User.query.filter_by(username=form.username.data).first()
         if user and user.check_password(form.password.data):
             login_user(user)
-            flash('登录成功！', 'success')
+            flash('Logged in successfully', 'success')
             return redirect(url_for('index'))
         else:
-            flash('登录失败，请检查用户名和密码', 'danger')
+            flash('Login failed, please check your username and password', 'danger')
     return render_template('login.html', form=form)
 
 
@@ -58,7 +58,7 @@ def register():
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
-        flash('注册成功！请登录', 'success')
+        flash('Registration successful! Please log in', 'success')
         return redirect(url_for('login'))
     return render_template('register.html', form=form)
 
@@ -117,22 +117,22 @@ def send_message(chat_id):
     if not message_text:
         return jsonify({'error': 'Message cannot be empty'}), 400
 
-    # 将用户消息存储到数据库中
+    # Store user message in the database
     user_message = Message(chat_id=chat_id, user_id=current_user.id, text=message_text, is_response=False,
                            timestamp=datetime.datetime.now())
     db.session.add(user_message)
     db.session.commit()
 
-    # 获取 AI 回复
+    # Get AI reply
     ai_response = get_completion(message_text)
 
-    # 将 AI 消息存储到数据库中
+    #  Store AI message in the database
     ai_message = Message(chat_id=chat_id, user_id=None, text=ai_response, is_response=True,
                          timestamp=datetime.datetime.now())
     db.session.add(ai_message)
     db.session.commit()
 
-    # 如果聊天的context字段为空
+    # If the chat's context field is empty
     if not chat.context:
         chat.context = summarize(message_text)
         db.session.commit()
@@ -151,10 +151,10 @@ def delete_chat(chat_id):
     if not chat:
         return jsonify({'error': 'Chat not found'}), 404
 
-    # 删除所有相关的消息
+    # Delete all the message
     Message.query.filter_by(chat_id=chat_id).delete()
 
-    # 删除聊天
+    # Delete the chat
     db.session.delete(chat)
     db.session.commit()
 

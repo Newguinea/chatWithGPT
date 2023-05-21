@@ -23,7 +23,6 @@ def getReply(text, final_prompt="what is this story? do you think it is a good s
 def compressText(text, compress_prompt, final_prompt):
     condition = llm.get_num_tokens(text + final_prompt) > 3800
     while condition:
-        # TODO 如果大于3800 token，拆解成10000字符长度，3000重合长度的段落
         text_splitter = RecursiveCharacterTextSplitter(separators=["\n\n", "\n", "\t", " ", ".", ","], chunk_size=10000,
                                                        chunk_overlap=3000)
         docs = text_splitter.create_documents([text])
@@ -38,14 +37,13 @@ def compressText(text, compress_prompt, final_prompt):
                                          chain_type="stuff",
                                          prompt=map_prompt_template)
         selected_docs = [doc for doc in selected_docs]
-        # Make an empty list to hold your summaries
         summary_list = []
 
-        # Loop through a range of the lenght of your selected docs
+        # Loop through a range of the length
         for i, doc in enumerate(selected_docs):
             # Go get a summary of the chunk
             chunk_summary = map_chain.run([doc])
-            # Append that summary to your list
+            # Append that summary to list
             summary_list.append(chunk_summary)
 
         summaries = "\n".join(summary_list)
