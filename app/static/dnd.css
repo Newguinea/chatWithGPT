@@ -11,7 +11,7 @@ body {
 .chat-container {
     display: flex;
     flex-direction: column;
-    height: calc(100vh - 110px);
+    height: calc(100vh - 181px);
     justify-content: space-between;  /* Aligns children vertically */
 }
 
@@ -47,14 +47,6 @@ body {
     position: absolute;
     width: 0;
     height: 0;
-    /*border-style: solid;*/
-    /*!*border-width: 0 100px 100px 100px;*!*/
-    /*!*border-color: transparent transparent #fff transparent;*!*/
-    /*border-radius: 5px; !* Slightly rounded corners *!*/
-    /*transform: rotate(45deg);*/
-    /*left: 50%;*/
-    /*top: 50%;*/
-    /*transform: translate(-50%, -50%);*/
 }
 
 .chat-input-container {
@@ -83,4 +75,8 @@ body {
     background: #007bff;
     color: white;
     cursor: pointer;
+}
+
+h1 {
+    margin-left: 3%;
 }
